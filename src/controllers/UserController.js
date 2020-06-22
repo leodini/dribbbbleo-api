@@ -63,4 +63,25 @@ module.exports = {
       return res.json(updatedUser);
     }
   },
+  async follow(req, res) {
+    const { _id } = req.user;
+    const { id } = req.params;
+
+    const user = await User.findById(_id);
+
+    const targetUser = await User.findById(id);
+
+    if (user.following.includes(targetUser.id)) {
+      return res.json({ msg: "you already follow this person " });
+    }
+
+    if (user === targetUser) {
+      return res.json({ msg: "you cannot follow yourself " });
+    }
+
+    user.following.push(targetUser);
+    user.save();
+
+    return res.json(user);
+  },
 };

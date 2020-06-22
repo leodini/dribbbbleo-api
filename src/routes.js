@@ -2,7 +2,7 @@
 const uploadConfig = require("./config/upload");
 const routes = require("express-promise-router")();
 const passport = require("passport");
-const passportConf = require("./config/passport");
+require("./config/passport");
 
 const { validateBody, schemas } = require("./middlewares/routeHelpers");
 
@@ -19,32 +19,23 @@ routes.post("/signup", validateBody(schemas.authSchema), UserController.signUp);
 routes.post("/signin", passportLocal, UserController.signIn);
 routes.get("/user/:userId", UserController.index);
 routes.put("/user", UserController.updateUser);
+routes.post("/user/follow/:id", passportJwt, UserController.follow);
 
 //like routes
-routes.post("/like/:id/post", passportJwt, LikeController.likePost);
-routes.post("/like/:id/comment", passportJwt, LikeController.likeComment);
+routes.post("/like/post/:id", passportJwt, LikeController.likePost);
+routes.post("/like/comment/:id", passportJwt, LikeController.likeComment);
 routes.get("/like/count/:id", LikeController.index);
 
 //comment routes
 routes.post("/comment/:projectId", passportJwt, CommentController.create);
 routes.get("/comment/:projectId", CommentController.index);
-routes.post(
-  "/comment/:commentId/update",
-  passportJwt,
-  CommentController.update
-);
+routes.put("/comment/update/:commentId", passportJwt, CommentController.update);
 
 //post routes
 routes.get("/posts", PostController.index);
 routes.get("/posts/search", PostController.searchPost);
 routes.get("/posts/:projectId", PostController.uniquePost);
-routes.post(
-  "/posts",
-  passportJwt,
-  // validateBody(schemas.postSchema),
-  // multer(uploadConfig).single("file"),
-  PostController.store
-);
+routes.post("/posts", passportJwt, PostController.store);
 routes.delete("/posts/:id", passportJwt, PostController.remove);
 
 module.exports = routes;
