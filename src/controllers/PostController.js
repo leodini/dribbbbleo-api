@@ -3,20 +3,20 @@ const User = require("../models/User");
 
 module.exports = {
   async store(req, res) {
-    const { title, description, category } = req.body;
+    const { title, description, category, image_url } = req.body;
 
     const user = await User.findById(req.user.id);
 
     if (!user) {
       return res.status(400).json({ error: "user does not exist" });
     }
-
+    console.log(category);
     const categoryArray = category
       .split(",")
       .map((category) => category.trim());
 
     const newPost = await Post.create({
-      image: req.file.filename,
+      image_url,
       title,
       description,
       category: categoryArray,

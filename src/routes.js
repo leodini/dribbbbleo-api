@@ -1,4 +1,4 @@
-const multer = require("multer");
+// const multer = require("multer");
 const uploadConfig = require("./config/upload");
 const routes = require("express-promise-router")();
 const passport = require("passport");
@@ -18,6 +18,7 @@ const passportJwt = passport.authenticate("jwt", { session: false });
 routes.post("/signup", validateBody(schemas.authSchema), UserController.signUp);
 routes.post("/signin", passportLocal, UserController.signIn);
 routes.get("/user/:userId", UserController.index);
+routes.put("/user", UserController.updateUser);
 
 //like routes
 routes.post("/like/:id/post", passportJwt, LikeController.likePost);
@@ -41,7 +42,7 @@ routes.post(
   "/posts",
   passportJwt,
   // validateBody(schemas.postSchema),
-  multer(uploadConfig).single("file"),
+  // multer(uploadConfig).single("file"),
   PostController.store
 );
 routes.delete("/posts/:id", passportJwt, PostController.remove);

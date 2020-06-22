@@ -6,7 +6,7 @@ const { ExtractJwt } = require("passport-jwt");
 const User = require("../models/User");
 
 const authenticateToken = async (payload, done) => {
-  const user = await User.findById(payload.sub);
+  const user = await User.findById(payload.sub.user_id);
   try {
     if (!user) {
       return done(null, false, { message: "no user found" });

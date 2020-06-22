@@ -14,11 +14,29 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  avatar: String,
+  avatar_url: String,
   posts: [
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Post",
+    },
+  ],
+  liked: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Post",
+    },
+  ],
+  following: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
+  ],
+  followers: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
     },
   ],
 });

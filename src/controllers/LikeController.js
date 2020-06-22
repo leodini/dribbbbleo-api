@@ -1,5 +1,6 @@
 const Post = require("../models/Post");
 const Comment = require("../models/Comment");
+const User = require("../models/User");
 
 module.exports = {
   async likePost(req, res) {
@@ -7,6 +8,7 @@ module.exports = {
     const user = req.user;
 
     const targetPost = await Post.findById(id);
+    const currentUser = await User.findById(user._id);
 
     if (!targetPost) {
       return res.status(400).json({ error: "Post not found" });
@@ -17,8 +19,10 @@ module.exports = {
     }
 
     targetPost.likes.push(user._id);
+    currentUser.liked.push(id);
 
     await targetPost.save();
+    await currentUser.save();
 
     return res.json(targetPost);
   },
