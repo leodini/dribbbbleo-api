@@ -8,8 +8,8 @@ signToken = (user) => {
       iss: "dribllleclone",
       sub: {
         username: user.username,
-        user_id: user.id,
         avatar_url: user.avatar_url,
+        user_id: user.id,
       },
       iat: new Date().getTime(),
       exp: new Date().setDate(new Date().getDate() + 30),
@@ -80,7 +80,9 @@ module.exports = {
     }
 
     user.following.push(targetUser);
-    user.save();
+    targetUser.followers.push(user);
+    await targetUser.save();
+    await user.save();
 
     return res.json(user);
   },

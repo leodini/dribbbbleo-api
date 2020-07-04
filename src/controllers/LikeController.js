@@ -15,7 +15,7 @@ module.exports = {
     }
 
     if (targetPost.likes.includes(user._id)) {
-      return res.json({ message: "you already liked this post" });
+      return res.status(400).json({ message: "you already liked this post" });
     }
 
     targetPost.likes.push(user._id);
@@ -37,7 +37,8 @@ module.exports = {
     }
 
     if (targetComment.likes.includes(user._id)) {
-      return res.json({ message: "you already liked this post" });
+      console.log("aqui");
+      return res.status(400).json({ error: "you already liked this post" });
     }
 
     targetComment.likes.push(user._id);

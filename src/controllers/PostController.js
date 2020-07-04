@@ -32,9 +32,9 @@ module.exports = {
   async index(req, res) {
     const { order_by } = req.query;
 
-    if (order_by === "new") {
+    if (order_by === "popular") {
       const posts = await Post.find()
-        .sort({ createdAt: "desc" })
+        .sort({ likes: "desc" })
         .populate("author comments")
         .exec();
       return res.json(posts);

@@ -21,7 +21,7 @@ module.exports = {
       password: Joi.string().required(),
       username: Joi.string().required(),
       bio: Joi.string(),
-      avatar: Joi.string().allow(null, ""),
+      avatar_url: Joi.string().allow(null, ""),
     }),
     postSchema: Joi.object().keys({
       title: Joi.string().required(),
