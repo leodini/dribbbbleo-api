@@ -53,15 +53,19 @@ module.exports = {
   },
   async updateUser(req, res) {
     const user = req.user;
-    const { bio, avatar_url } = req.body;
+    const { username, bio, avatar_url } = req.body;
 
-    if (filename && bio) {
-      const updatedUser = await User.findByIdAndUpdate(user._id, {
-        avatar_url,
-        bio,
-      });
-      return res.json(updatedUser);
+    if (!username) {
+      return res.status(400).json({ msg: "you must provide a username" });
     }
+
+    const updatedUser = await User.findByIdAndUpdate(user._id, {
+      username,
+      avatar_url,
+      bio,
+    });
+
+    return res.json(updatedUser);
   },
   async follow(req, res) {
     const { _id } = req.user;

@@ -18,7 +18,7 @@ const passportJwt = passport.authenticate("jwt", { session: false });
 routes.post("/signup", validateBody(schemas.authSchema), UserController.signUp);
 routes.post("/signin", passportLocal, UserController.signIn);
 routes.get("/user/:userId", UserController.index);
-routes.put("/user", UserController.updateUser);
+routes.put("/user", passportJwt, UserController.updateUser);
 routes.post("/user/follow/:id", passportJwt, UserController.follow);
 
 //like routes
