@@ -65,7 +65,9 @@ module.exports = {
       bio,
     });
 
-    return res.json(updatedUser);
+    const refreshToken = signToken(updatedUser);
+
+    return res.json(refreshToken);
   },
   async follow(req, res) {
     const { _id } = req.user;
@@ -73,21 +75,21 @@ module.exports = {
 
     const user = await User.findById(_id);
 
-    const targetUser = await User.findById(id);
+    const targetUser = await User.findById(id).populate("posts").exec();
 
     if (user.following.includes(targetUser.id)) {
-      return res.json({ msg: "you already follow this person " });
+      user.following.pop(targetUser);
+      targetUser.followers.pop(user);
+    } else {
+      user.following.push(targetUser);
+      targetUser.followers.push(user);
     }
 
-    if (user === targetUser) {
-      return res.json({ msg: "you cannot follow yourself " });
-    }
-
-    user.following.push(targetUser);
-    targetUser.followers.push(user);
     await targetUser.save();
     await user.save();
 
-    return res.json(user);
+    await targetUser;
+
+    return res.json(targetUser);
   },
 };
